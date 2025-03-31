@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    vector<pair<int,int>> points;
+    int x,y;
+    while(cin >> x >> y){
+        points.emplace_back(x,y);
+    }
+    if (points.at(0).first == points.at(1).first) cout << points.at(2).first << " ";
+    else if (points.at(1).first == points.at(2).first) cout << points.at(0).first << " ";
+    else if (points.at(0).first == points.at(2).first) cout << points.at(1).first << " ";
+    if (points.at(0).second == points.at(1).second) cout << points.at(2).second;
+    else if (points.at(1).second == points.at(2).second) cout << points.at(0).second;
+    else if (points.at(0).second == points.at(2).second) cout << points.at(1).second;
+
+    return 0;
+}

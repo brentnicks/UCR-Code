@@ -1,0 +1,23 @@
+#include <iostream>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+    map<int, int> m;
+    int count;
+    cin >> count;
+    for (int i = 0; i < count; i++){
+        int cardNumber;
+        cin >> cardNumber;
+        if (m.count(cardNumber) == 0){
+            m.insert({cardNumber, 1});
+        }
+        else m.at(cardNumber) += 1;
+    }
+    for (auto it = m.begin(); it != m.end(); it++){
+        cout << it->first << " " << it->second << endl;
+    }
+    return 0;
+}

@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    int n, k, x, count = 0;
+    vector<int> A;
+    cin >> n >> k >> x;
+    for (unsigned i = 0; i < n; i++){
+        int curr;
+        cin >> curr;
+        A.push_back(curr);
+    }
+    
+    std::sort(A.begin(),A.end(),std::greater<int>());
+    
+    
+while (k > 0 && A.at(0) > 0){
+    if (A.at(0) - x > 0){
+        A.at(0) -= x;
+    }
+    else {
+        A.at(0) = 0;
+    }
+    if (A.size() >= 2){
+        if (A.at(0) <= A.at(1))std::sort(A.begin(),A.end(),std::greater<int>());
+    }
+    k--;
+}
+    
+    
+    for (unsigned i = 0; i < n; i++){
+        count += A.at(i);
+    }
+    cout << count;
+    return 0;
+}
