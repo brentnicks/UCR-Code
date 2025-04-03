@@ -8,21 +8,18 @@ using namespace std;
 bool isValid(int target, vector<pair<long long, long long>> pos) {
     int n = pos.size();
 
-    int left = 0;
-    for (int i = 0; i < n; i++) {
-        while (left < n && pos[left].second >= target) {
-            left++;
-            if (left >= n) {
-                break;
-            }
-        }
-        if (pos[i].second > target) {
-            long long needed = target - pos[left].second;
-            long long toSpare = pos[i].second - target;
-            long long dist = pos[i].first - pos[left].first;
-            if (toSpare > dist) {
-                pos[left].second += min(needed, toSpare - dist);
-                pos[i].second -= min(needed + dist, toSpare);
+    for (int i = 0; i < n - 1; i++) {
+        if (pos[i].second < target) {
+            long long needed = target - pos[i].second;
+            long long dist = pos[i + 1].first - pos[i].first;
+            pos[i].second += needed;
+            pos[i + 1].second -= (needed + dist);
+        } else if (pos[i].second > target) {
+            long long extra = target - pos[i].second;
+            long long dist = pos[i + 1].first - pos[i].first;
+            if (dist < extra) {
+                pos[i].second -= extra;
+                pos[i + 1].second += (extra - dist);
             }
         }
     }
@@ -30,9 +27,8 @@ bool isValid(int target, vector<pair<long long, long long>> pos) {
     for (int i = 0; i < n; i++) {
         cout << pos[i].second << " ";
     }
-
     cout << endl;
-
+    
     for (int i = 0; i < n; i++) {
         if (pos[i].second < target) {
             return false;
@@ -59,15 +55,20 @@ int main() {
         candy += c;
     }
 
-    // long long dist = 0;
-
-    // for (int i = 0; i < n - 1; i++) {
-    //     dist += abs(pos[i + 1] - pos[i]);
+    long long left = 0, right = candy / n + 1, mid = 0;
+    long long ans = 0;
+    // while (left < right) {
+    //     mid = left + (right - left) / 2;
+    //     if (isValid(mid, pos)) {
+    //         ans = mid;
+    //         left = mid + 1;
+    //     } else {
+    //         right = mid;
+    //     }
     // }
 
-    // cout << floor((candy - dist) / (n * 1.0L));
-
-    cout << isValid(450, pos) << endl;
+    // cout << ans << endl;
+    cout << isValid(333, pos) << endl;
 
     return 0;
 }
