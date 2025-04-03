@@ -15,7 +15,7 @@ bool isValid(int target, vector<pair<long long, long long>> pos) {
             pos[i].second += needed;
             pos[i + 1].second -= (needed + dist);
         } else if (pos[i].second > target) {
-            long long extra = target - pos[i].second;
+            long long extra = pos[i].second - target;
             long long dist = pos[i + 1].first - pos[i].first;
             if (dist < extra) {
                 pos[i].second -= extra;
@@ -24,11 +24,6 @@ bool isValid(int target, vector<pair<long long, long long>> pos) {
         }
     }
 
-    for (int i = 0; i < n; i++) {
-        cout << pos[i].second << " ";
-    }
-    cout << endl;
-    
     for (int i = 0; i < n; i++) {
         if (pos[i].second < target) {
             return false;
@@ -57,18 +52,17 @@ int main() {
 
     long long left = 0, right = candy / n + 1, mid = 0;
     long long ans = 0;
-    // while (left < right) {
-    //     mid = left + (right - left) / 2;
-    //     if (isValid(mid, pos)) {
-    //         ans = mid;
-    //         left = mid + 1;
-    //     } else {
-    //         right = mid;
-    //     }
-    // }
+    while (left <= right) {
+        mid = left + (right - left) / 2;
+        if (isValid(mid, pos)) {
+            ans = mid;
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
 
-    // cout << ans << endl;
-    cout << isValid(333, pos) << endl;
+    cout << ans << endl;
 
     return 0;
 }
