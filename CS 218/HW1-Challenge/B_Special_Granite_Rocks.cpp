@@ -70,6 +70,11 @@ int quick_select(vector<int>& list, unordered_map<int, int>& mp, unordered_map<p
         if (l < r) {
             cout << "swap " << l << " " << r << endl;
             swap(list[l], list[r]);
+            cout << "list: ";
+            for (int i : list) {
+                cout << i << " ";
+            }
+            cout << endl;
             l++;
             r--;
         }
@@ -77,9 +82,9 @@ int quick_select(vector<int>& list, unordered_map<int, int>& mp, unordered_map<p
     mp[pivotIndex] = pivotVal;
 
     if (l < target) {
-        return quick_select(list, mp, prev, pivotIndex, end, target);
+        return quick_select(list, mp, prev, pivotIndex + 1, end, target);
     } else if (l > target) {
-        return quick_select(list, mp, prev, begin, pivotIndex, target);
+        return quick_select(list, mp, prev, begin, pivotIndex - 1, target);
     } else {
         return list[l];
     }
