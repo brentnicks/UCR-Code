@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
-#include <cstdlib>
 
 using namespace std;
 
@@ -15,79 +14,44 @@ struct pair_hash {
 };
 
 int quick_select(vector<int>& list, unordered_map<int, int>& mp, unordered_map<pair<int, int>, char, pair_hash>& prev, int l, int r, int target) {
-    // if (list.size() == 1) {
-    //     return list[0];
+    int pivot = r;
+    int j = l;
+    for (int i = l; i < r; i++) {
+        // if (prev.count({list[i], list[pivot]})) {
+        //     if (prev[{list[i], list[pivot]}] == '<') {
+        //         cout << "used" << endl;
+        //         swap(list[i], list[j]);
+        //         j++;
+        //     }
+        // }
+        // else {
+            cout << "? " << list[i] << " " << list[pivot] << endl;
+            cout.flush();
+            string input;
+            cin >> input;
+            if (input == "<") {
+                swap(list[i], list[j]);
+                prev[{list[i], list[j]}] = '<';
+                prev[{list[j], list[i]}] = '>';
+                j++;
+            } else if (input == "x") {
+                return -1;
+            } else {
+                prev[{list[i],list[j]}] = '>';
+                prev[{list[j], list[i]}] = '<';
+            }
+        }
     // }
-    if (mp[target]) {
-        return mp[target];
+    swap(list[j], list[pivot]);
+    mp[j] = list[j];
+    if (j == target) {
+        return list[j];
+    } else if (j > target) {
+        return quick_select(list, mp, prev, l, j - 1, target);
+    } else if (j < target) {
+        return quick_select(list, mp, prev, j + 1, r, target);
     }
-    int begin = l, end = r;
-    int pivotIndex = rand() % (r - l + 1) + l;
-    int pivotVal = list[pivotIndex];
-    while (l < r) {
-        while (list[l] < pivotVal) {
-            // if (prev.find({l, pivotIndex}) != prev.end()) {
-            //     if (prev[{l, pivotIndex}] == '<') {
-            //         l++;
-            //         continue;
-            //     } else if (prev[{l, pivotIndex}] == '>') {
-            //         break;
-            //     }
-            // }
-            cout << "? " << list[l] << " " << pivotVal << endl;
-            cout.flush();
-            string input;
-            cin >> input;
-            if (input == "x") {
-                return -1;
-            } else if (input == "<") {
-                l++;
-                prev[{l, pivotIndex}] = '<';
-                prev[{pivotIndex, l}] = '>';
-            } else if (input == ">") {
-                prev[{l, pivotIndex}] = '>';
-                prev[{pivotIndex, l}] = '<';
-                break;
-            }
-        }
-        while (list[r] > pivotVal) {
-            cout << "? " << list[r] << " " << pivotVal << endl;
-            cout.flush();
-            string input;
-            cin >> input;
-            if (input == "x") {
-                return -1;
-            } else if (input == ">") {
-                r--;
-                prev[{r, pivotIndex}] = '>';
-                prev[{pivotIndex, r}] = '<';
-            } else if (input == "<") {
-                prev[{r, pivotIndex}] = '<';
-                prev[{pivotIndex, r}] = '>';
-                break;
-            }
-        }
-        if (l < r) {
-            cout << "swap " << l << " " << r << endl;
-            swap(list[l], list[r]);
-            cout << "list: ";
-            for (int i : list) {
-                cout << i << " ";
-            }
-            cout << endl;
-            l++;
-            r--;
-        }
-    }
-    mp[pivotIndex] = pivotVal;
-
-    if (l < target) {
-        return quick_select(list, mp, prev, pivotIndex + 1, end, target);
-    } else if (l > target) {
-        return quick_select(list, mp, prev, begin, pivotIndex - 1, target);
-    } else {
-        return list[l];
-    }
+    else return 0;
 }
 
 int main() {
@@ -116,18 +80,19 @@ int main() {
                 continue;
             } else {
                 int l = 0, r = n - 1;
-                for (auto it : mp) {
-                    if (it.first < j - 1) {
-                        l = it.first;
-                    } else if (it.first > j - 1) {
-                        r = it.first;
-                    }
-                }
+                // for (auto it : mp) {
+                //     if (it.first < j - 1) {
+                //         l = it.first;
+                //     } else if (it.first > j - 1) {
+                //         r = it.first;
+                //     }
+                // }
                 int num = quick_select(list, mp, prev, l, r, j - 1);
                 if (num == -1) {
                     return 0;
                 }
                 ans.push_back(num);
+                // ans.push_back(quick_select(list, mp, l, r, j - 1));
             }
         }
         cout << "! ";
@@ -135,6 +100,10 @@ int main() {
             cout << ans[j] << " ";
         }
         cout << ans[ans.size() - 1] << endl;
+
+        // for (int i : list) {
+        //     cout << i << " ";
+        // }
     }
 
     return 0;
